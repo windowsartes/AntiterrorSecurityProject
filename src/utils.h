@@ -35,19 +35,19 @@ cv::Mat equalizeHistRGB(cv::Mat image); // done
 /// @param emptyImages 
 /// @param mask 
 /// @return 
-std::pair<int, int> getGLobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask);
+std::pair<int, int> getGLobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask); // done
 
 /// @brief
 /// @param image1 
 /// @param image2 
 /// @param difference 
-cv::Mat getDifference(cv::Mat image1, cv::Mat image2, cv::Mat difference);
+cv::Mat getDifference(cv::Mat image1, cv::Mat image2, cv::Mat difference); 
 
 /// @brief 
 /// @param image1 
 /// @param image2 
 /// @return 
-std::pair<int, int> getLocalUpperAndLowerBorder(cv::Mat image1, cv::Mat image2, int& argMax, int& argMin);
+std::pair<int, int> getLocalUpperAndLowerBorder(cv::Mat image1, cv::Mat image2, int& argMax, int& argMin); //done
 
 /// @brief 
 /// @param image1 
