@@ -1,7 +1,7 @@
 #include "../../../include/preprocessing/grayscale/preprocessing.h"
 
 
-cv::Mat prepareImage(cv::Mat image, cv::Mat mask, bool useHitigramEqualization) {
+cv::Mat grayscale::prepareImage(cv::Mat image, cv::Mat mask, bool useHitigramEqualization) {
     if (useHitigramEqualization) {
         cv::equalizeHist(image, image);
     }

@@ -1,7 +1,7 @@
 #include "../../../include/preprocessing/RGB/preprocessing.h"
 
 
-cv::Mat prepareImage(cv::Mat image, cv::Mat mask, bool useHitigramEqualization) {
+cv::Mat RGB::prepareImage(cv::Mat image, cv::Mat mask, bool useHitigramEqualization) {
     if (useHitigramEqualization) {
         image  = equalizeHist(image);
     }
@@ -11,7 +11,7 @@ cv::Mat prepareImage(cv::Mat image, cv::Mat mask, bool useHitigramEqualization) 
     return buffImage;
 }
 
-cv::Mat equalizeHist(cv::Mat image) {
+cv::Mat RGB::equalizeHist(cv::Mat image) {
     cv::Mat buffImage;
     cv::cvtColor(image, buffImage, cv::COLOR_BGR2YCrCb);
 
