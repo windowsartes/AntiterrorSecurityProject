@@ -1,8 +1,8 @@
-#include "../../../include/preprocessing/RGB/preprocessing.h"
+#include "preprocessing.hpp"
 
 
-cv::Mat RGB::prepareImage(cv::Mat image, cv::Mat mask, bool useHitigramEqualization) {
-    if (useHitigramEqualization) {
+cv::Mat RGB::prepareImage(cv::Mat image, cv::Mat mask, bool useHistogramEqualization) {
+    if (useHistogramEqualization) {
         image  = equalizeHist(image);
     }
     cv::Mat buffImage;

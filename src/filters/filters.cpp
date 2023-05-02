@@ -1,4 +1,4 @@
-#include "../../include/filters/filters.h"
+#include "filters.hpp"
 
 
 cv::Mat maxNeighbourFilter(cv::Mat image, int kernelSize) {

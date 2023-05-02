@@ -2,7 +2,7 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "../../include/utils/utils.h"
+#include "utils.hpp"
 
 
 std::vector<cv::String> getImagesFromFolder(std::string pathToData) {
