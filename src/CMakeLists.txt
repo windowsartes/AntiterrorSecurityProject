@@ -4,6 +4,7 @@ add_library(
     preprocessing/grayscale/preprocessing.cpp
     preprocessing/RGB/preprocessing.cpp
     utils/utils.cpp
+    noise_borders/noise_borders.cpp
 )
 
 target_include_directories(src PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

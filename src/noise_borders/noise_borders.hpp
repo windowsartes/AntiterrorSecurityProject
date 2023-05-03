@@ -1,16 +1,13 @@
-#pragma once
+/// @brief 
+/// @param first_value 
+/// @param last_value 
+/// @return 
+int getRandomNumber(int first_value, int last_value);
 
-#include <utility>
-#include <string>
-#include <stdexcept>
-#include <iostream>
-
-#include <opencv2/opencv.hpp>
-
-// #include "./../preprocessing/grayscale/preprocessing.h"
-#include "../utils/utils.h"
-#include "../preprocessing/grayscale/preprocessing.h"
-
+/// @brief 
+/// @param values 
+/// @return 
+float getVectorMedian(std::vector<int> values);
 
 /// @brief 
 /// @param image1 
