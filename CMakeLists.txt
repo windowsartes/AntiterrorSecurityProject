@@ -13,5 +13,5 @@ add_subdirectory(src)
 
 target_link_libraries(antiterror_security src)
 
-#enable_testing()
-#add_subdirectory(tests)
+enable_testing()
+add_subdirectory(tests)
