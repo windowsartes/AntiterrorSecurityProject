@@ -2,7 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include <filesystem>
 
-#include "../../include/filters/filters.h"
+#include <filters/filters.hpp>
 
 
 TEST(white_image, square) {

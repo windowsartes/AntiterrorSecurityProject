@@ -1,7 +1,16 @@
 #include <gtest/gtest.h>
 #include <opencv2/opencv.hpp>
 
-#include "../../include/noise_borders/noise_borders.h"
+#include <noise_borders/noise_borders.hpp>
+
+TEST(random_generator, correct_borders_0_100) {
+    srand(42);
+    int bottom = 0, top = 100;
+    for (int indexI = 0; indexI < 100000; ++indexI) {
+        int currentValue = getRandomNumber(bottom, top);
+        ASSERT_FALSE((currentValue < bottom) || (currentValue > top));
+    }
+}
 
 
 TEST(exception, 1_or_3_channels) {
