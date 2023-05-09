@@ -3,6 +3,63 @@
 
 #include <noise_borders/noise_borders.hpp>
 
+
+TEST(median, random_example) {
+    std::vector<int> testArray = {9,1,0,2,3,4,6,8,7,10,5};
+
+    ASSERT_TRUE(quickSelectMedian(testArray) == 5);
+}
+
+TEST(median, random_odd) {
+    for (int indexI = 0; indexI < 1000; indexI++) {
+        int size = (rand() % 100)*2 + 1;
+        std::vector<int> testArray = {};
+        for (int indexJ = 0; indexJ < size; indexJ++) {
+            testArray.push_back(rand() % 1000);
+        }
+        std::vector<int> testArrayCopy;
+        testArrayCopy = testArray;
+        float result = quickSelectMedian(testArrayCopy);
+
+        std::sort(testArray.begin(), testArray.end());
+        float answer = testArray[size/2];
+
+        ASSERT_TRUE(result == answer);
+    }
+}
+
+TEST(median, random_even) {
+    for (int indexI = 0; indexI < 1000; indexI++) {
+        int size = (rand() % 100 + 1)*2; // so size can't be 0; this case covered in the another test;
+        std::vector<int> testArray = {};
+        for (int indexJ = 0; indexJ < size; indexJ++) {
+            testArray.push_back(rand() % 1000);
+        }
+        std::vector<int> testArrayCopy;
+        testArrayCopy = testArray;
+        float result = quickSelectMedian(testArrayCopy);
+
+
+        std::sort(testArray.begin(), testArray.end());
+        float answer = (static_cast<float>(testArray[size/2]) + testArray[(size-1)/2])/2;
+
+        ASSERT_TRUE(result == answer);
+    }
+}
+
+TEST(median, empty_vector) {
+    std::vector<int> testArray = {};
+    EXPECT_THROW({
+        try {
+            quickSelectMedian(testArray);
+        }
+        catch(const std::invalid_argument& exception) {
+            EXPECT_STREQ("This vector is empty;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
+
 TEST(random_generator, correct_borders_0_100) {
     srand(42);
     int bottom = 0, top = 100;
@@ -21,7 +78,7 @@ TEST(exception, 1_or_3_channels) {
             getLocalUpperAndLowerBorder(image1, image2);
         }
         catch(const std::invalid_argument& exception) {
-            EXPECT_STREQ("Images can have only 1 or 3 channels!", exception.what());
+            EXPECT_STREQ("Images can have only 1 or 3 channels;", exception.what());
             throw;
         }
     }, std::invalid_argument);
@@ -35,7 +92,7 @@ TEST(exception, equal_channels) {
             getLocalUpperAndLowerBorder(image1, image2);
         }
         catch(const std::invalid_argument& exception) {
-            EXPECT_STREQ("First and second images must have the same number of channels!", exception.what());
+            EXPECT_STREQ("First and second images must have the same number of channels;", exception.what());
             throw;
         }
     }, std::invalid_argument);

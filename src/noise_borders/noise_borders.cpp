@@ -5,6 +5,7 @@
 #include <numeric>
 #include <algorithm>
 #include <stdlib.h>
+#include <vector>
 
 #include <opencv2/opencv.hpp>
 
@@ -15,22 +16,65 @@
 
 
 int getRandomNumber(int first_value, int last_value) {
-    return first_value + rand() % last_value + 1;
+    return first_value + rand() % (last_value + 1);
 }
 
-float getVectorMedian(std::vector<int> values) {
-    return 0;
+float quickSelectMedian(std::vector<int> values) {
+    if (!values.size()) {
+        throw std::invalid_argument("This vector is empty;");
+    }
+    if (values.size() % 2 == 0) {
+        return (quickSelect(values, values.size()/2) + quickSelect(values, (values.size()-1)/2))/2;
+    }
+    return quickSelect(values, values.size()/2);
+}
+
+float quickSelect(std::vector<int> values, int k) {
+    if (values.size() == 1) {
+        return values[0];
+    }
+
+    int pivot = values[getRandomNumber(0, values.size() - 1)];
+
+    std::vector<int> less = {}, equal = {}, greater = {};
+
+    for (auto elem : values) {
+        if (elem < pivot) {
+            less.push_back(elem);
+        }
+        else {
+            if (elem == pivot) {
+                equal.push_back(elem);
+            }
+            else {
+                greater.push_back(elem);
+            }
+        }
+    }
+
+    if (k < less.size()) {
+        return quickSelect(less, k);
+    }
+    if (k < less.size() + equal.size()) {
+        return equal[0];
+    }
+    else {
+        return quickSelect(greater, k - less.size() - equal.size());
+    }
 }
 
 
 std::pair<int, int> getLocalUpperAndLowerBorder(cv::Mat image1, cv::Mat image2) {
+
     if (image1.channels() != image2.channels()) {
-        throw std::invalid_argument("First and second images must have the same number of channels!");
+        throw std::invalid_argument("First and second images must have the same number of channels;");
     }
     if ((image1.channels() != 3) && (image1.channels() != 1)) {
-        throw std::invalid_argument("Images can have only 1 or 3 channels!");
+        throw std::invalid_argument("Images can have only 1 or 3 channels;");
     }
+
     int numberOfChannels = image1.channels();
+
     int maxValue = -255*numberOfChannels - 1; 
     int minValue = 255*numberOfChannels + 1;
     for (int indexI = 0; indexI < image1.rows; ++indexI) {
@@ -58,9 +102,9 @@ std::pair<int, int> getLocalUpperAndLowerBorder(cv::Mat image1, cv::Mat image2) 
 }
 
 
-std::pair<int, int> getGLobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask,
+std::pair<float, float> getGlobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask,
                                                  std::string borderType, std::string imageType, bool useHistogramEqualization) {
-                                            
+
     if (imageType == "RGB") {
         initialImage = RGB::prepareImage(initialImage, mask, useHistogramEqualization);
     }
@@ -69,21 +113,22 @@ std::pair<int, int> getGLobalUpperAndLowerBorder(cv::Mat initialImage, std::vect
             initialImage = grayscale::prepareImage(initialImage, mask, useHistogramEqualization);
         }
         else {
-            throw std::invalid_argument("We can work only with RGB or grayscale images!");
+            throw std::invalid_argument("We can work only with RGB or grayscale images;");
         }
     }
     
-
-    std::vector<int> upperBorders, lowerBorders;
+    std::vector<int> upperBorders = {}, lowerBorders = {};
     std::pair<int, int> currentBorders;
 
     for (int indexI = 0; indexI < int(emptyImages.size()); ++indexI) {
-        cv::Mat currentImage = cv::imread(emptyImages[indexI], cv::IMREAD_COLOR);
+        cv::Mat currentImage;
     
         if (imageType == "RGB") {
+            currentImage = cv::imread(emptyImages[indexI], cv::IMREAD_COLOR);
             currentImage = RGB::prepareImage(currentImage, mask, useHistogramEqualization);
         }
         else {
+            currentImage = cv::imread(emptyImages[indexI], cv::IMREAD_GRAYSCALE);
             currentImage = grayscale::prepareImage(currentImage, mask, useHistogramEqualization);
         }
 
@@ -92,19 +137,25 @@ std::pair<int, int> getGLobalUpperAndLowerBorder(cv::Mat initialImage, std::vect
         upperBorders.push_back(currentBorders.second);
     }
 
-    std::cout << temp() << std::endl;
-    
-    for (int indexI = 0; indexI < int(lowerBorders.size()); ++indexI) {
-        std::cout << lowerBorders[indexI] << " ";
+    std::cout << 3 << std::endl;
+
+    std::cout << borderType << std::endl;
+
+    for (auto elem : lowerBorders) {
+        std::cout << elem << " ";
     }
 
     std::cout << std::endl;
 
-    for (int indexI = 0; indexI < int(upperBorders.size()); ++indexI) {
-        std::cout << upperBorders[indexI] << " ";
+    for (auto elem : upperBorders) {
+        std::cout << elem << " ";
     }
 
     std::cout << std::endl;
+
+    // zero means there is no noise so we'll remove it;
+    lowerBorders.erase(std::remove(lowerBorders.begin(), lowerBorders.end(), 0), lowerBorders.end());
+    upperBorders.erase(std::remove(upperBorders.begin(), upperBorders.end(), 0), upperBorders.end());
 
     if (borderType == "max") {
         std::vector<int>::iterator minValueIterator = std::min_element(lowerBorders.begin(), lowerBorders.end());
@@ -115,25 +166,16 @@ std::pair<int, int> getGLobalUpperAndLowerBorder(cv::Mat initialImage, std::vect
     else {
         if (borderType == "mean") {
             float count = static_cast<float>(upperBorders.size());
-            float meanUpperBorder = std::reduce(upperBorders.begin(), upperBorders.end()) / count;
-            float meanLowerBorder = std::reduce(lowerBorders.begin(), lowerBorders.end()) / count;
+            float meanUpper = std::reduce(upperBorders.begin(), upperBorders.end()) / count;
+            float meanLower = std::reduce(lowerBorders.begin(), lowerBorders.end()) / count;
 
-            return std::make_pair(meanLowerBorder, meanUpperBorder);
+            return std::make_pair(meanLower, meanUpper);
         }
         else {
             if (borderType == "median") {
-                int size = upperBorders.size();
-                if (size % 2 == 1) {
-                    std::nth_element(upperBorders.begin(), upperBorders.begin() + size/2, upperBorders.end());
-                    std::nth_element(lowerBorders.begin(), lowerBorders.begin() + size/2, lowerBorders.end());
-
-                    return std::make_pair(lowerBorders[size/2], upperBorders[size/2]);
-                }
-                else {
-                    std::nth_element(upperBorders.begin(), upperBorders.begin() + size/2, upperBorders.end());
-                    std::nth_element(upperBorders.begin(), upperBorders.begin() + (size - 1)/2, upperBorders.end());
-                }
+                float medianLower = quickSelectMedian(lowerBorders), medianUpper = quickSelectMedian(upperBorders);
                 
+                return std::make_pair(medianLower, medianUpper);
             }
             else {
                 throw std::invalid_argument("Wrong border type;");

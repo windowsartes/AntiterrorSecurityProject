@@ -3,7 +3,7 @@
 
 cv::Mat RGB::prepareImage(cv::Mat image, cv::Mat mask, bool useHistogramEqualization) {
     if (useHistogramEqualization) {
-        image  = equalizeHist(image);
+        image = RGB::equalizeHist(image);
     }
     cv::Mat buffImage;
     image.copyTo(buffImage, mask);

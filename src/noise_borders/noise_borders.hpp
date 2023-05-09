@@ -6,8 +6,14 @@ int getRandomNumber(int first_value, int last_value);
 
 /// @brief 
 /// @param values 
+/// @param k 
 /// @return 
-float getVectorMedian(std::vector<int> values);
+float quickSelect(std::vector<int> values, int k);
+
+/// @brief 
+/// @param values 
+/// @return 
+float quickSelectMedian(std::vector<int> values);
 
 /// @brief 
 /// @param image1 
@@ -20,6 +26,8 @@ std::pair<int, int> getLocalUpperAndLowerBorder(cv::Mat image1, cv::Mat image2);
 /// @param emptyImages 
 /// @param mask 
 /// @param borderType 
+/// @param imageType 
+/// @param useHistogramEqualization 
 /// @return 
-std::pair<int, int> getGLobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask,
-                                                 std::string borderType, std::string imageType, bool useHistogramEqualization);
+std::pair<float, float> getGlobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask,
+                                                     std::string borderType, std::string imageType, bool useHistogramEqualization);
