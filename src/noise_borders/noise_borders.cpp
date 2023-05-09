@@ -103,7 +103,7 @@ std::pair<int, int> getLocalUpperAndLowerBorder(cv::Mat image1, cv::Mat image2) 
 
 
 std::pair<float, float> getGlobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask,
-                                                 std::string borderType, std::string imageType, bool useHistogramEqualization) {
+                                                     std::string borderType, std::string imageType, bool useHistogramEqualization) {
 
     if (imageType == "RGB") {
         initialImage = RGB::prepareImage(initialImage, mask, useHistogramEqualization);
@@ -136,8 +136,6 @@ std::pair<float, float> getGlobalUpperAndLowerBorder(cv::Mat initialImage, std::
         lowerBorders.push_back(currentBorders.first);
         upperBorders.push_back(currentBorders.second);
     }
-
-    std::cout << 3 << std::endl;
 
     std::cout << borderType << std::endl;
 
