@@ -1,6 +1,7 @@
-#include <opencv2/opencv.hpp>
+#pragma once
 
 
+/// @brief 
 namespace RGB {
 
     /// @brief 

@@ -1,15 +1,10 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include <opencv2/opencv.hpp>
-
 
 /// @brief 
-/// @param  
+/// @param pathToData
 /// @return 
-std::vector<cv::String> getImagesFromFolder(std::string);
+std::vector<cv::String> getImagesFromFolder(std::string pathToData);
 
 /// @brief 
 /// @param firstImage 

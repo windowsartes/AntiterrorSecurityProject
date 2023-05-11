@@ -1,3 +1,6 @@
+#pragma once
+
+
 /// @brief 
 /// @param first_value 
 /// @param last_value 
