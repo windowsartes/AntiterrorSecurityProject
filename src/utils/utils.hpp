@@ -10,3 +10,9 @@
 /// @param  
 /// @return 
 std::vector<cv::String> getImagesFromFolder(std::string);
+
+/// @brief 
+/// @param firstImage 
+/// @param secondImage 
+/// @return 
+cv::Mat getDifference(cv::Mat image1, cv::Mat image2);
