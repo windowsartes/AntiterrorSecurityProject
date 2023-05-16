@@ -34,3 +34,10 @@ std::pair<int, int> getLocalUpperAndLowerBorder(cv::Mat image1, cv::Mat image2);
 /// @return 
 std::pair<float, float> getGlobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask,
                                                      std::string borderType, std::string imageType, bool useHistogramEqualization);
+
+/// @brief 
+/// @param image 
+/// @param lowerBorder 
+/// @param upperBorder 
+/// @return 
+cv::Mat thresholdImage(cv::Mat image, float lowerBorder, float upperBorder);

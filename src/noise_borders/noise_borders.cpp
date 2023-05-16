@@ -181,3 +181,21 @@ std::pair<float, float> getGlobalUpperAndLowerBorder(cv::Mat initialImage, std::
         }
     }
 }
+
+cv::Mat thresholdImage(cv::Mat image, float lowerBorder, float upperBorder) {
+    if (image.channels() != 1) {
+        throw std::invalid_argument("There image must have only 1 channel;");
+    }
+
+    cv::Mat imageThresholded(image.size(), CV_8UC1, cv::Scalar(0));
+    
+    for (int indexI = 0; indexI < image.rows; ++indexI) {
+        for (int indexJ = 0; indexJ < image.cols; ++indexJ) {
+            if ((float(image.at<short>(indexI, indexJ)) > upperBorder) || float((image.at<short>(indexI, indexJ)) < lowerBorder)) {
+                imageThresholded.at<uchar>(indexI, indexJ) = 1;
+            }
+        }
+    }
+
+    return imageThresholded;
+}
