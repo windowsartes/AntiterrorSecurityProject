@@ -6,6 +6,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/noise_borders/test_noise_borders.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/test_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/detection/test_detection.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/working_surface/test_working_surface.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
