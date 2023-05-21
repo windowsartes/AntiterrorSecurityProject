@@ -22,16 +22,16 @@ void findObject(cv::Mat& thresholdedImage, std::vector<std::vector<bool>>& visit
         rightBorder = indexJ;
     }
 
-    if ((indexI - 1 >= 0) && (thresholdedImage.at<uchar>)(indexI-1, indexJ) && (!visited[indexI-1][indexJ])) {
+    if ((indexI - 1 >= 0) && (thresholdedImage.at<uchar>(indexI-1, indexJ)) && (!visited[indexI-1][indexJ])) {
         findObject(thresholdedImage, visited, indexI-1, indexJ, leftBorder, rightBorder, topBorder, bottomBorder);
     }
-    if ((indexI + 1 < thresholdedImage.rows) && (thresholdedImage.at<uchar>)(indexI+1, indexJ) && (!visited[indexI+1][indexJ])) {
+    if ((indexI + 1 < thresholdedImage.rows) && (thresholdedImage.at<uchar>(indexI+1, indexJ)) && (!visited[indexI+1][indexJ])) {
         findObject(thresholdedImage, visited, indexI+1, indexJ, leftBorder, rightBorder, topBorder, bottomBorder);
     }
     if ((indexJ - 1 >= 0) && (thresholdedImage.at<uchar>)(indexI, indexJ-1) && (!visited[indexI][indexJ-1])) {
         findObject(thresholdedImage, visited, indexI, indexJ-1, leftBorder, rightBorder, topBorder, bottomBorder);
     }
-    if ((indexJ + 1 < thresholdedImage.cols) && (thresholdedImage.at<uchar>)(indexI, indexJ+1) && (!visited[indexI][indexJ+1])) {
+    if ((indexJ + 1 < thresholdedImage.cols) && (thresholdedImage.at<uchar>(indexI, indexJ+1)) && (!visited[indexI][indexJ+1])) {
         findObject(thresholdedImage, visited, indexI, indexJ+1, leftBorder, rightBorder, topBorder, bottomBorder);
     }    
 }
