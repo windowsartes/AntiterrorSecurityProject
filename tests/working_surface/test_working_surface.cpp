@@ -4,6 +4,19 @@
 #include <gtest/gtest.h>
 
 
+TEST(findSurface, exception_1_or_3_channels) {
+    cv::Mat image = cv::Mat::zeros(10, 10, CV_8UC2);
+    EXPECT_THROW({
+        try {
+            findSurface(image);
+        } 
+        catch(const std::invalid_argument& exception) {
+            ASSERT_STREQ("Only 3- or 1-channel image is allowes here;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
+
 /*
 ******
 *####*
