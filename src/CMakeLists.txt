@@ -1,8 +1,6 @@
 add_library(
     src STATIC
     filters/filters.cpp
-    preprocessing/grayscale/preprocessing.cpp
-    preprocessing/RGB/preprocessing.cpp
     preprocessing/preprocessing.cpp
     utils/utils.cpp
     noise_borders/noise_borders.cpp
