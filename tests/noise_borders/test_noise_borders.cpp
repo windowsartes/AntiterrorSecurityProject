@@ -188,7 +188,7 @@ TEST(gray, random_image_4) {
     ASSERT_TRUE((result.first == -160) && (result.second == 159));
 }
 
-TEST(threshold_image, max_value_1) {
+TEST(threshold_image, 16s_max_value_1) {
     cv::Mat image = cv::Mat(10, 10, CV_16SC1, cv::Scalar(255*3));
     cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(0));
 
@@ -201,9 +201,9 @@ TEST(threshold_image, max_value_1) {
     }
 }
 
-TEST(threshold_image, max_value_2) {
+TEST(threshold_image, 16s_max_value_2) {
     cv::Mat image = cv::Mat(10, 10, CV_16SC1, cv::Scalar(255*3));
-    cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(1));
+    cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(255));
 
     cv::Mat result;
     result = thresholdImage(image, 0, 255*3-1);
@@ -214,7 +214,7 @@ TEST(threshold_image, max_value_2) {
     }
 }
 
-TEST(threshold_image, min_value_1) {
+TEST(threshold_image, 16s_min_value_1) {
     cv::Mat image = cv::Mat(10, 10, CV_16SC1, cv::Scalar(-255*3));
     cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(0));
 
@@ -227,9 +227,9 @@ TEST(threshold_image, min_value_1) {
     }
 }
 
-TEST(threshold_image, min_value_2) {
+TEST(threshold_image, 16s_min_value_2) {
     cv::Mat image = cv::Mat(10, 10, CV_16SC1, cv::Scalar(-255*3));
-    cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(1));
+    cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(255));
 
     cv::Mat result;
     result = thresholdImage(image, -255*3+1, 0);
@@ -240,7 +240,7 @@ TEST(threshold_image, min_value_2) {
     }
 }
 
-TEST(threshol_image, random) {
+TEST(threshol_image, 16s_simple_test) {
     cv::Mat image = cv::Mat(5, 5, CV_16SC1, cv::Scalar(100));
     for (int indexI = 1; indexI < 4; ++indexI) {
         for (int indexJ = 1; indexJ < 4; ++indexJ) {
@@ -251,7 +251,84 @@ TEST(threshol_image, random) {
     cv::Mat answer = cv::Mat(5, 5, CV_8UC1, cv::Scalar(0));
     for (int indexI = 1; indexI < 4; ++indexI) {
         for (int indexJ = 1; indexJ < 4; ++indexJ) {
-            answer.at<uchar>(indexI, indexJ) = 1;
+            answer.at<uchar>(indexI, indexJ) = 255;
+        }
+    }
+    
+    cv::Mat result;
+    result = thresholdImage(image, 0, 150);
+
+    for (int indexI = 0; indexI < result.rows; ++indexI) {
+        for (int indexJ = 0; indexJ < result.cols; ++indexJ) {
+            ASSERT_TRUE(answer.at<uchar>(indexI, indexJ) == result.at<uchar>(indexI, indexJ));
+        }
+    }
+}
+
+TEST(threshold_image, 8u_max_value_1) {
+    cv::Mat image = cv::Mat(10, 10, CV_8UC1, cv::Scalar(255));
+    cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(0));
+
+    cv::Mat result;
+    result = thresholdImage(image, 0, 255);
+    for (int indexI = 0; indexI < result.rows; ++indexI) {
+        for (int indexJ = 0; indexJ < result.cols; ++indexJ) {
+            ASSERT_TRUE(answer.at<uchar>(indexI, indexJ) == result.at<uchar>(indexI, indexJ));
+        }
+    }
+}
+
+TEST(threshold_image, 8u_max_value_2) {
+    cv::Mat image = cv::Mat(10, 10, CV_8UC1, cv::Scalar(255));
+    cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(255));
+
+    cv::Mat result;
+    result = thresholdImage(image, 0, 255-1);
+    for (int indexI = 0; indexI < result.rows; ++indexI) {
+        for (int indexJ = 0; indexJ < result.cols; ++indexJ) {
+            ASSERT_TRUE(answer.at<uchar>(indexI, indexJ) == result.at<uchar>(indexI, indexJ));
+        }
+    }
+}
+
+TEST(threshold_image, 8u_min_value_1) {
+    cv::Mat image = cv::Mat(10, 10, CV_8UC1, cv::Scalar(0));
+    cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(0));
+
+    cv::Mat result;
+    result = thresholdImage(image, 0, 0);
+    for (int indexI = 0; indexI < result.rows; ++indexI) {
+        for (int indexJ = 0; indexJ < result.cols; ++indexJ) {
+            ASSERT_TRUE(answer.at<uchar>(indexI, indexJ) == result.at<uchar>(indexI, indexJ));
+        }
+    }
+}
+
+TEST(threshold_image, 8u_min_value_2) {
+    cv::Mat image = cv::Mat(10, 10, CV_8UC1, cv::Scalar(0));
+    cv::Mat answer = cv::Mat(10, 10, CV_8UC1, cv::Scalar(255));
+
+    cv::Mat result;
+    result = thresholdImage(image, 1, 0);
+    for (int indexI = 0; indexI < result.rows; ++indexI) {
+        for (int indexJ = 0; indexJ < result.cols; ++indexJ) {
+            ASSERT_TRUE(answer.at<uchar>(indexI, indexJ) == result.at<uchar>(indexI, indexJ));
+        }
+    }
+}
+
+TEST(threshol_image, 8u_simple_test) {
+    cv::Mat image = cv::Mat(5, 5, CV_8UC1, cv::Scalar(100));
+    for (int indexI = 1; indexI < 4; ++indexI) {
+        for (int indexJ = 1; indexJ < 4; ++indexJ) {
+            image.at<uchar>(indexI, indexJ) = 200;
+        }
+    }
+    
+    cv::Mat answer = cv::Mat(5, 5, CV_8UC1, cv::Scalar(0));
+    for (int indexI = 1; indexI < 4; ++indexI) {
+        for (int indexJ = 1; indexJ < 4; ++indexJ) {
+            answer.at<uchar>(indexI, indexJ) = 255;
         }
     }
     

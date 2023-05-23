@@ -1,7 +1,6 @@
 #include <utility>
 #include <string>
 #include <stdexcept>
-#include <iostream>
 #include <numeric>
 #include <algorithm>
 #include <stdlib.h>
@@ -10,9 +9,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "noise_borders.hpp"
-
-#include <preprocessing/grayscale/preprocessing.hpp>
-#include <preprocessing/RGB/preprocessing.hpp>
+#include <preprocessing/preprocessing.hpp>
 
 
 int getRandomNumber(int first_value, int last_value) {
@@ -30,6 +27,10 @@ float quickSelectMedian(std::vector<int> values) {
 }
 
 float quickSelect(std::vector<int> values, int k) {
+    if (k < 0) {
+        throw std::invalid_argument("k must be greater of equal to zero;");
+    }
+
     if (values.size() == 1) {
         return values[0];
     }
@@ -103,19 +104,13 @@ std::pair<int, int> getLocalUpperAndLowerBorder(cv::Mat image1, cv::Mat image2) 
 
 
 std::pair<float, float> getGlobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask,
-                                                     std::string borderType, std::string imageType, bool useHistogramEqualization) {
+                                                     std::string borderType, bool useHistogramEqualization) {
+    int channels = initialImage.channels();
+    if ((channels !=3) && (channels != 1)) {
+        throw std::invalid_argument("Initial image can have either 3 or 1 channel;");
+    }
 
-    if (imageType == "RGB") {
-        initialImage = RGB::prepareImage(initialImage, mask, useHistogramEqualization);
-    }
-    else {
-        if (imageType == "grayscale") {
-            initialImage = grayscale::prepareImage(initialImage, mask, useHistogramEqualization);
-        }
-        else {
-            throw std::invalid_argument("We can work only with RGB or grayscale images;");
-        }
-    }
+    initialImage = prepareImage(initialImage, mask, useHistogramEqualization, initialImage.size());
     
     std::vector<int> upperBorders = {}, lowerBorders = {};
     std::pair<int, int> currentBorders;
@@ -123,33 +118,19 @@ std::pair<float, float> getGlobalUpperAndLowerBorder(cv::Mat initialImage, std::
     for (int indexI = 0; indexI < int(emptyImages.size()); ++indexI) {
         cv::Mat currentImage;
     
-        if (imageType == "RGB") {
+        if (channels == 3) {
             currentImage = cv::imread(emptyImages[indexI], cv::IMREAD_COLOR);
-            currentImage = RGB::prepareImage(currentImage, mask, useHistogramEqualization);
+            currentImage = prepareImage(currentImage, mask, useHistogramEqualization, initialImage.size());
         }
         else {
             currentImage = cv::imread(emptyImages[indexI], cv::IMREAD_GRAYSCALE);
-            currentImage = grayscale::prepareImage(currentImage, mask, useHistogramEqualization);
+            currentImage = prepareImage(currentImage, mask, useHistogramEqualization, initialImage.size());
         }
 
         currentBorders = getLocalUpperAndLowerBorder(initialImage, currentImage);
         lowerBorders.push_back(currentBorders.first);
         upperBorders.push_back(currentBorders.second);
     }
-
-    std::cout << borderType << std::endl;
-
-    for (auto elem : lowerBorders) {
-        std::cout << elem << " ";
-    }
-
-    std::cout << std::endl;
-
-    for (auto elem : upperBorders) {
-        std::cout << elem << " ";
-    }
-
-    std::cout << std::endl;
 
     // zero means there is no noise so we'll remove it;
     lowerBorders.erase(std::remove(lowerBorders.begin(), lowerBorders.end(), 0), lowerBorders.end());
@@ -186,13 +167,26 @@ cv::Mat thresholdImage(cv::Mat image, float lowerBorder, float upperBorder) {
     if (image.channels() != 1) {
         throw std::invalid_argument("There image must have only 1 channel;");
     }
+    if ((image.type() != CV_16SC1) && (image.type() != CV_8U)) {
+        throw std::invalid_argument("Image type must be either 16SC1 or 8US1;");
+    }
 
     cv::Mat imageThresholded(image.size(), CV_8UC1, cv::Scalar(0));
-    
-    for (int indexI = 0; indexI < image.rows; ++indexI) {
-        for (int indexJ = 0; indexJ < image.cols; ++indexJ) {
-            if ((float(image.at<short>(indexI, indexJ)) > upperBorder) || float((image.at<short>(indexI, indexJ)) < lowerBorder)) {
-                imageThresholded.at<uchar>(indexI, indexJ) = 1;
+    if (image.type() == CV_16SC1) {
+        for (int indexI = 0; indexI < image.rows; ++indexI) {
+            for (int indexJ = 0; indexJ < image.cols; ++indexJ) {
+                if ((float(image.at<short>(indexI, indexJ)) > upperBorder) || float((image.at<short>(indexI, indexJ)) < lowerBorder)) {
+                    imageThresholded.at<uchar>(indexI, indexJ) = 255;
+                }
+            }
+        }
+    }
+    else {
+        for (int indexI = 0; indexI < image.rows; ++indexI) {
+            for (int indexJ = 0; indexJ < image.cols; ++indexJ) {
+                if ((float(image.at<uchar>(indexI, indexJ)) > upperBorder) || float((image.at<uchar>(indexI, indexJ)) < lowerBorder)) {
+                    imageThresholded.at<uchar>(indexI, indexJ) = 255;
+                }
             }
         }
     }
