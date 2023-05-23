@@ -106,7 +106,7 @@ std::pair<int, int> getLocalUpperAndLowerBorder(cv::Mat image1, cv::Mat image2) 
 std::pair<float, float> getGlobalUpperAndLowerBorder(cv::Mat initialImage, std::vector<cv::String> emptyImages, cv::Mat mask,
                                                      std::string borderType, bool useHistogramEqualization) {
     int channels = initialImage.channels();
-    if ((channels !=3) || (channels != 1)) {
+    if ((channels !=3) && (channels != 1)) {
         throw std::invalid_argument("Initial image can have either 3 or 1 channel;");
     }
     if (emptyImages.empty()) {
