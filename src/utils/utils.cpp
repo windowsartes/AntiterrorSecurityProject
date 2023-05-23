@@ -15,7 +15,6 @@ std::vector<cv::String> getImagesFromFolder(std::string pathToData) {
 }
 
 cv::Mat getDifference(cv::Mat image1, cv::Mat image2) {
-
     if (image1.channels() != image2.channels()) {
         throw std::invalid_argument("First and second images must have the same number of channels;");
     }

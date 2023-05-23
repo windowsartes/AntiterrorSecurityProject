@@ -1,54 +1,50 @@
-#include <opencv2/opencv.hpp>
-#include <opencv2/imgproc.hpp>
-
 #include <stdexcept>
+#include <string>
+
+#include <opencv2/imgproc.hpp>
 
 #include "working_surface.hpp"
 
 
-void checkPixel(cv::Mat& image, std::vector<std::vector<bool>>& visited, cv::Mat& surface, int indexI, int indexJ, int it) {
+void checkPixel(cv::Mat& image, std::vector<std::vector<bool>>& visited, cv::Mat& surface, int indexI, int indexJ) {
         
     surface.at<uchar>(indexI, indexJ) = 255;    
     visited[indexI][indexJ] = true;
 
     if ((indexI - 1 >= 0) && (image.at<uchar>(indexI-1, indexJ) == 0) && (!visited[indexI-1][indexJ])) {
-        //std::cout << 1 << std::endl;
-        checkPixel(image, visited, surface, indexI-1, indexJ, it+1);
+        checkPixel(image, visited, surface, indexI-1, indexJ);
     }
     if ((indexI + 1 < image.rows) && (image.at<uchar>(indexI+1, indexJ) == 0) && (!visited[indexI+1][indexJ])) {
-        //std::cout << 2 << std::endl;
-        checkPixel(image, visited, surface, indexI+1, indexJ, it+1);
+        checkPixel(image, visited, surface, indexI+1, indexJ);
     }
     if ((indexJ - 1 >= 0) && (image.at<uchar>(indexI, indexJ-1) == 0) && (!visited[indexI][indexJ-1])) {
-        //std::cout << 3 << std::endl;
-        checkPixel(image, visited, surface, indexI, indexJ-1, it+1);
+        checkPixel(image, visited, surface, indexI, indexJ-1);
     }
     if ((indexJ + 1 < image.cols) && (image.at<uchar>(indexI, indexJ+1) == 0) && (!visited[indexI][indexJ+1])) {
-        //std::cout << 4 << std::endl;
-        checkPixel(image, visited, surface, indexI, indexJ+1, it+1);
+        checkPixel(image, visited, surface, indexI, indexJ+1);
     }
 }
 
-void removeHoles(cv::Mat& image) {
+void removeHoles(cv::Mat& surface) {
     std::vector<int> topBorders, bottomBorders;
     
-    for (int indexJ = 0; indexJ < image.cols; ++indexJ) {
+    for (int indexJ = 0; indexJ < surface.cols; ++indexJ) {
 
         bool found = false;
-        for (int indexI = 0; indexI < image.rows; ++indexI) {
-            if (image.at<uchar>(indexI, indexJ) == 255) {
+        for (int indexI = 0; indexI < surface.rows; ++indexI) {
+            if (surface.at<uchar>(indexI, indexJ) == 255) {
                 topBorders.push_back(indexI);
                 found = true;
                 break;
             }
         }
         if (!found) {
-            topBorders.push_back(image.rows);
+            topBorders.push_back(surface.rows);
         }
         
         found = false;
-        for (int indexI = image.rows - 1; indexI >= 0; --indexI) {
-            if (image.at<uchar>(indexI, indexJ) == 255) {
+        for (int indexI = surface.rows - 1; indexI >= 0; --indexI) {
+            if (surface.at<uchar>(indexI, indexJ) == 255) {
                 bottomBorders.push_back(indexI);
                 found = true;
                 break;
@@ -59,18 +55,11 @@ void removeHoles(cv::Mat& image) {
         }
     }
 
-    // for (int i = image.cols - 20; i < image.cols; i++) {
-    //     std::cout << topBorders[i] << " " << bottomBorders[i] << "\n";
-    // }
-
-    for (int indexI = 0; indexI < image.rows; ++indexI) {
-        for (int indexJ = 0; indexJ < image.cols; ++indexJ) {
-            if (image.at<uchar>(indexI, indexJ) != 255) {
-                // std::cout << "zero" << std::endl;
+    for (int indexI = 0; indexI < surface.rows; ++indexI) {
+        for (int indexJ = 0; indexJ < surface.cols; ++indexJ) {
+            if (surface.at<uchar>(indexI, indexJ) != 255) {
                 if ((indexI <= bottomBorders[indexJ]) && (indexI >= topBorders[indexJ])) {
-                    // std::cout << indexJ << " " << bottomBorders[indexI] << " " << indexJ << " " << topBorders[indexI] << "\n";
-                    // std::cout << "zero removed" << std::endl;
-                    image.at<uchar>(indexI, indexJ) = 255;
+                    surface.at<uchar>(indexI, indexJ) = 255;
                 }
             }
         }
@@ -97,13 +86,7 @@ cv::Mat findSurface(cv::Mat image) {
     cv::blur(image, detectedEdges, cv::Size(3,3));
     cv::Canny(detectedEdges, detectedEdges, lowThreshold, lowThreshold*ratio, kernel_size);
 
-    //cv::namedWindow("canny", cv::WINDOW_NORMAL);
-    //cv::imshow("canny", detectedEdges);
-
     cv::dilate(detectedEdges, detectedEdges, getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)));
-
-    //cv::namedWindow("detectedEdges", cv::WINDOW_NORMAL);
-    //cv::imshow("detectedEdges", detectedEdges);
 
     std::vector<std::vector<bool>> visited(image.rows, std::vector<bool>(image.cols, false));
 
@@ -115,25 +98,16 @@ cv::Mat findSurface(cv::Mat image) {
     for (int indexI = leftTopPount.y; indexI < rightBottomPoint.y; ++indexI) {
         for (int indexJ = leftTopPount.x; indexJ < rightBottomPoint.x; ++indexJ) {
             if ((!detectedEdges.at<uchar>(indexI, indexJ)) && !(visited[indexI][indexJ])) {
-                checkPixel(detectedEdges, visited, surface, indexI, indexJ, 0);
+                checkPixel(detectedEdges, visited, surface, indexI, indexJ);
             }
         }
     }
 
     cv::resize(surface, surface, cv::Size(surface.cols*4, surface.rows*4));
 
-    // cv::namedWindow("with holes", cv::WINDOW_NORMAL);
-    // cv::imshow("with holes", surface);
-
     removeHoles(surface);
 
-    // cv::namedWindow("without holes", cv::WINDOW_NORMAL);
-    // cv::imshow("without holes", surface);
-
     cv::threshold(surface, surface, 1, 255, cv::THRESH_BINARY);
-
-    // cv::namedWindow("threshold", cv::WINDOW_NORMAL);
-    // cv::imshow("threshold", surface);
 
     cv::imwrite("../mask/mask_computed.jpg", surface);
 

@@ -1,11 +1,13 @@
-#include "detection.hpp"
+#include <vector>
 #include <iostream>
+
+#include <opencv2/opencv.hpp>
+
+#include "detection.hpp"
 
 
 void findObject(cv::Mat& thresholdedImage, std::vector<std::vector<bool>>& visited, int indexI, int indexJ,
                             int& leftBorder, int& rightBorder, int& topBorder, int& bottomBorder) {
-
-    // std::cout << indexI << " " << indexJ << std::endl;
 
     visited[indexI][indexJ] = true;
     
@@ -37,6 +39,10 @@ void findObject(cv::Mat& thresholdedImage, std::vector<std::vector<bool>>& visit
 }
 
 std::vector<std::vector<int>> detectObjects(cv::Mat thresholdedImage) {
+    if (thresholdedImage.channels() != 1) {
+        throw std::invalid_argument("Only 1-channel image can be used there!");
+    }
+
     std::vector<std::vector<bool>> visited(thresholdedImage.rows, std::vector<bool>(thresholdedImage.cols, false));
     std::vector<std::vector<int>> objects;
     int left, right, bottom, top;
@@ -53,6 +59,6 @@ std::vector<std::vector<int>> detectObjects(cv::Mat thresholdedImage) {
             }
         }
     }
-
+    
     return objects;
 }
