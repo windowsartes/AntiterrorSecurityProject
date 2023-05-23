@@ -4,7 +4,7 @@
 
 
 cv::Mat maxNeighbourFilter(cv::Mat image, int kernelSize) {
-    if ((image.channels() != 1) && (image.type() != CV_8U)) {
+    if ((image.channels() != 1) || (image.type() != CV_8U)) {
         throw std::invalid_argument("Only 1-channel image can be used there;");
     }
     if (kernelSize % 2 == 0) {
