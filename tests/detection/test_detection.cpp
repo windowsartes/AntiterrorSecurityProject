@@ -71,6 +71,32 @@ TEST(find_object, corner_case_long_rectangle) {
     ASSERT_TRUE((l == 0) && (r == image.cols - 1) && (t == 0) && (b == image.rows - 1));
 }
 
+TEST(detect_objects, catch_exception_8UC3) {
+    cv::Mat image = cv::Mat(10, 10, CV_8UC3, cv::Scalar(0));
+    EXPECT_THROW({
+        try {
+            detectObjects(image);
+        }
+        catch(const std::invalid_argument& exception) {
+            EXPECT_STREQ("Only 1-channel image with CV_8U type can be used there;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
+
+TEST(detect_objects, catch_exception_16SC1) {
+    cv::Mat image = cv::Mat(10, 10, CV_16SC1, cv::Scalar(0));
+    EXPECT_THROW({
+        try {
+            detectObjects(image);
+        }
+        catch(const std::invalid_argument& exception) {
+            EXPECT_STREQ("Only 1-channel image with CV_8U type can be used there;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
+
 TEST(detect_objects, empty_image) {
     cv::Mat image = cv::Mat::zeros(200, 200, CV_8U);
 

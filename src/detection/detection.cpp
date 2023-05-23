@@ -39,8 +39,8 @@ void findObject(cv::Mat& thresholdedImage, std::vector<std::vector<bool>>& visit
 }
 
 std::vector<std::vector<int>> detectObjects(cv::Mat thresholdedImage) {
-    if (thresholdedImage.channels() != 1) {
-        throw std::invalid_argument("Only 1-channel image can be used there!");
+    if ((thresholdedImage.channels() != 1) || (thresholdedImage.type() != CV_8U)) {
+        throw std::invalid_argument("Only 1-channel image with CV_8U type can be used there;");
     }
 
     std::vector<std::vector<bool>> visited(thresholdedImage.rows, std::vector<bool>(thresholdedImage.cols, false));
