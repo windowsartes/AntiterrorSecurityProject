@@ -2,6 +2,7 @@
 #include <opencv2/opencv.hpp>
 
 #include <noise_borders/noise_borders.hpp>
+#include <utils/utils.hpp>
 
 
 TEST(median, random_example) {
@@ -69,8 +70,21 @@ TEST(random_generator, correct_borders_0_100) {
     }
 }
 
+TEST(quick_select, negative_statistics) {
+    std::vector<int> input = {1, 2, 3};
+    EXPECT_THROW({
+        try {
+            quickSelect(input, -1); 
+        }
+        catch(const std::invalid_argument& exception) {
+            EXPECT_STREQ("k must be greater of equal to zero;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
 
-TEST(exception, 1_or_3_channels) {
+
+TEST(local_border, exception_1_or_3_channels) {
     cv::Mat image1(100, 100, CV_8UC2);
     cv::Mat image2(100, 100, CV_8UC2);
     EXPECT_THROW({
@@ -84,7 +98,7 @@ TEST(exception, 1_or_3_channels) {
     }, std::invalid_argument);
 }
 
-TEST(exception, equal_channels) {
+TEST(local_border, exception_equal_channels) {
     cv::Mat image1(100, 100, CV_8UC1);
     cv::Mat image2(100, 100, CV_8UC3);
     EXPECT_THROW({
@@ -98,7 +112,7 @@ TEST(exception, equal_channels) {
     }, std::invalid_argument);
 }
 
-TEST(RBG, random_image_0) {
+TEST(local_border, RBG_random_image_0) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_0_1.png", cv::IMREAD_COLOR);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_0_2.png", cv::IMREAD_COLOR);
 
@@ -107,7 +121,7 @@ TEST(RBG, random_image_0) {
     ASSERT_TRUE((result.first == -626) && (result.second == 644));
 }
 
-TEST(RBG, random_image_1) {
+TEST(local_border, RBG_random_image_1) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_1_1.png", cv::IMREAD_COLOR);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_1_2.png", cv::IMREAD_COLOR);
 
@@ -116,7 +130,7 @@ TEST(RBG, random_image_1) {
     ASSERT_TRUE((result.first == -662) && (result.second == 661));
 }
 
-TEST(RBG, random_image_2) {
+TEST(local_border, RBG_random_image_2) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_2_1.png", cv::IMREAD_COLOR);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_2_2.png", cv::IMREAD_COLOR);
 
@@ -125,7 +139,7 @@ TEST(RBG, random_image_2) {
     ASSERT_TRUE((result.first == -616) && (result.second == 610));
 }
 
-TEST(RBG, random_image_3) {
+TEST(local_border, RBG_random_image_3) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_3_1.png", cv::IMREAD_COLOR);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_3_2.png", cv::IMREAD_COLOR);
 
@@ -134,7 +148,7 @@ TEST(RBG, random_image_3) {
     ASSERT_TRUE((result.first == -657) && (result.second == 696));
 }
 
-TEST(RBG, random_image_4) {
+TEST(local_border, RBG_random_image_4) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_4_1.png", cv::IMREAD_COLOR);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_4_2.png", cv::IMREAD_COLOR);
 
@@ -143,7 +157,7 @@ TEST(RBG, random_image_4) {
     ASSERT_TRUE((result.first == -654) && (result.second == 641));
 }
 
-TEST(gray, random_image_0) {
+TEST(local_border, gray_random_image_0) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_0_1_gray.png", cv::IMREAD_GRAYSCALE);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_0_2_gray.png", cv::IMREAD_GRAYSCALE);
 
@@ -152,7 +166,7 @@ TEST(gray, random_image_0) {
     ASSERT_TRUE((result.first == -160) && (result.second == 159));
 }
 
-TEST(gray, random_image_1) {
+TEST(local_border, gray_random_image_1) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_1_1_gray.png", cv::IMREAD_GRAYSCALE);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_1_2_gray.png", cv::IMREAD_GRAYSCALE);
 
@@ -161,7 +175,7 @@ TEST(gray, random_image_1) {
     ASSERT_TRUE((result.first == -160) && (result.second == 160));
 }
 
-TEST(gray, random_image_2) {
+TEST(local_border, gray_random_image_2) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_2_1_gray.png", cv::IMREAD_GRAYSCALE);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_2_2_gray.png", cv::IMREAD_GRAYSCALE);
 
@@ -170,7 +184,7 @@ TEST(gray, random_image_2) {
     ASSERT_TRUE((result.first == -160) && (result.second == 159));
 }
 
-TEST(gray, random_image_3) {
+TEST(local_border,gray_random_image_3) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_3_1_gray.png", cv::IMREAD_GRAYSCALE);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_3_2_gray.png", cv::IMREAD_GRAYSCALE);
 
@@ -179,7 +193,7 @@ TEST(gray, random_image_3) {
     ASSERT_TRUE((result.first == -159) && (result.second == 160));
 }
 
-TEST(gray, random_image_4) {
+TEST(local_border, gray_random_image_4) {
     cv::Mat image1 = cv::imread("../tests/data/input/random_image_4_1_gray.png", cv::IMREAD_GRAYSCALE);
     cv::Mat image2 = cv::imread("../tests/data/input/random_image_4_2_gray.png", cv::IMREAD_GRAYSCALE);
 
@@ -340,4 +354,34 @@ TEST(threshol_image, 8u_simple_test) {
             ASSERT_TRUE(answer.at<uchar>(indexI, indexJ) == result.at<uchar>(indexI, indexJ));
         }
     }
+}
+
+TEST(global_borders, exception_1_or_3_channels) {
+    cv::Mat initialImage = cv::Mat::zeros(10, 10, CV_8UC2);
+    cv::Mat mask = cv::Mat::zeros(10, 10, CV_8U);
+
+    EXPECT_THROW({
+        try {
+            getGlobalUpperAndLowerBorder(initialImage, getImagesFromFolder("../data/input"), mask, "max", true);
+        } 
+        catch(const std::invalid_argument& exception) {
+            ASSERT_STREQ("Initial image can have either 3 or 1 channel;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
+
+TEST(global_borders, exception_empty_images) {
+    cv::Mat initialImage = cv::Mat::zeros(10, 10, CV_8UC2);
+    cv::Mat mask = cv::Mat::zeros(10, 10, CV_8U);
+
+    EXPECT_THROW({
+        try {
+            getGlobalUpperAndLowerBorder(initialImage, getImagesFromFolder("this_path_doesnt_exist"), mask, "max", true);
+        } 
+        catch(const std::invalid_argument& exception) {
+            ASSERT_STREQ("Initial image can have either 3 or 1 channel;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
 }
