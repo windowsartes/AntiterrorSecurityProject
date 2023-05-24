@@ -35,11 +35,11 @@ The goal was to create and realize a method to detect adandoned items in the ele
 
 Let's take a look at the images. We start with an image of an empty elevator car.
 
-<img src="./data/background/empty/image_07.jpg" alt="drawing" width="300"/>
+<img src="./data/background/empty/image_07.jpg" alt="drawing" width="400"/>
 
 The light from the light bulb is actually non-permanent, so the illumination can change.
 
-<img src="./data/background/empty/image_10.jpg" alt="drawing" width="300"/>
+<img src="./data/background/empty/image_10.jpg" alt="drawing" width="400"/>
 
 Also the cabin moves, then the camera, so the image can be shifted from its original position. And this makes the task harder.
 
@@ -47,11 +47,11 @@ Also the cabin moves, then the camera, so the image can be shifted from its orig
 
 Sometimes there are lost items it the elevator cab, we need to detect them.
 
-<img src="./data/objects/3_objects/image_04.jpg" alt="drawing" width="300"/>
+<img src="./data/objects/3_objects/image_04.jpg" alt="drawing" width="400"/>
 
 Often people put ads on the walls of the elevator. Such things hardly pose a real threat, so we want to ignore their appearnce.
 
-<img src="./data/walls/objects/image_15.jpg" alt="drawing" width="300"/>
+<img src="./data/walls/objects/image_15.jpg" alt="drawing" width="400"/>
 
 So what solution have I proposed? 
 
@@ -61,7 +61,7 @@ So what solution have I proposed?
 #### Floor detecion
 Firstly, we need to find a working surface - the cabin's floor. To solve this problem, I've used a Canny edge detector with little post-processing. Below you can see the  resulted mask. 
 
-<img src="./mask/mask_computed.jpg" alt="drawing" width="300"/>
+<img src="./mask/mask_computed.jpg" alt="drawing" width="400"/>
 
 It's definitely not ideal, but it's good enough. Later I want to improve this result, may be another edge detector will show better performance.
 
@@ -187,11 +187,11 @@ I use the MIT License here, so feel free to copy and modify this code.
 Давайте взгляним на снимки кабины, чтобы понять, с чем придётся иметь дело. 
 Мы начинаем со снимка пустой кабины лифта.
 
-<img src="./data/background/empty/image_07.jpg" alt="drawing" width="300"/>
+<img src="./data/background/empty/image_07.jpg" alt="drawing" width="400"/>
 
 Освещённость кабины может меняться в процессе её движения.
 
-<img src="./data/background/empty/image_10.jpg" alt="drawing" width="300"/>
+<img src="./data/background/empty/image_10.jpg" alt="drawing" width="400"/>
 
 Помимо этого, кабина движется, что приводит в движение и камеру - она начинает шататься. Поэтому изображение также сдвигается относительно своего изначального положения, что делает задачу несколько труднее.
 
@@ -199,11 +199,11 @@ I use the MIT License here, so feel free to copy and modify this code.
 
 Иногда в кабине остаются какие-то вещи, их-то нам и нужно уметь находить.
 
-<img src="./data/objects/3_objects/image_04.jpg" alt="drawing" width="300"/>
+<img src="./data/objects/3_objects/image_04.jpg" alt="drawing" width="400"/>
 
 Часто люди клеят на стенки лифта объявления, стикеры и т.д. Едва ли эти вещи несут в себе какую-то угрозы, поэтому их мы хотим игнорировать.
 
-<img src="./data/walls/objects/image_15.jpg" alt="drawing" width="300"/>
+<img src="./data/walls/objects/image_15.jpg" alt="drawing" width="400"/>
 
 Так какое же решение я предложил? 
 
@@ -214,7 +214,7 @@ I use the MIT License here, so feel free to copy and modify this code.
 
 В первую очередь необходимо найти рабочую поверхность кабины - ей пол. Для решения этой задачи я использовал детектор границ Кэнни и лёгкую постобработку. Ниже вы можете наблюдать результат работы этого алгоритма:
 
-<img src="./mask/mask_computed.jpg" alt="drawing" width="300"/>
+<img src="./mask/mask_computed.jpg" alt="drawing" width="400"/>
 
 Да, маска получилась далеко не идеальной. В дальнейшем я хотел бы улучшить её, возможно, другой алгоритм обнаружения границ справится с этой задачей получше.
 
