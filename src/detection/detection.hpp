@@ -20,3 +20,11 @@ void findObject(cv::Mat& thresholdedImage, std::vector<std::vector<bool>>& visit
 /// @param thresholdedImage cv::Mat instance with 1 channel only;
 /// @return a vector of vectors instance where coordinates of found objects stored if Left-Right-Top-Bottom format;
 std::vector<std::vector<int>> detectObjects(cv::Mat thresholdedImage);
+
+/// @brief This fucntion just draws a rectagle on given image, according to given points. By convention, points here are the result of
+/// detectObjects call;
+/// @param image an image where you want to draw rectagles; usually a 3-channel image;
+/// @param objetcs coordinates of found objects; by convention, points are the result of detectObjects call;
+/// or at least point are in the Left-Right-Top-Bottom order;
+/// @return image with drawn rectangles;
+cv::Mat makeRectangles(cv::Mat image, std::vector<std::vector<int>> objetcs);

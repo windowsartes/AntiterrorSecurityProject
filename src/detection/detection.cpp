@@ -62,3 +62,13 @@ std::vector<std::vector<int>> detectObjects(cv::Mat thresholdedImage) {
     
     return objects;
 }
+
+cv::Mat makeRectangles(cv::Mat image, std::vector<std::vector<int>> objetcs) {
+    cv::Mat imageWithRectangles = image.clone();
+    for (auto object : objetcs) {
+        int left = object[0], right = object[1], top = object[2], bottom = object[3];
+        cv::rectangle(imageWithRectangles, cv::Point2d(left, top), cv::Point2d(right, bottom), cv::Scalar(0, 0, 255));
+    }
+
+    return imageWithRectangles.clone();
+}
