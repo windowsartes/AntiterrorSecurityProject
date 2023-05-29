@@ -2,8 +2,59 @@
 #include <opencv2/opencv.hpp>
 #include <filesystem>
 
-#include "../../include/filters/filters.h"
+#include <filters/filters.hpp>
 
+TEST(exception, wrong_number_of_channels) {
+    cv::Mat image = cv::Mat::zeros(10, 10, CV_8UC3);
+    EXPECT_THROW({
+        try {
+            maxNeighbourFilter(image, 3);
+        }
+        catch(const std::invalid_argument& exception) {
+            EXPECT_STREQ("Only 1-channel image can be used there;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
+
+TEST(exception, wrong_input_type) {
+    cv::Mat image = cv::Mat::zeros(10, 10, CV_16SC1);
+    EXPECT_THROW({
+        try {
+            maxNeighbourFilter(image, 3);
+        }
+        catch(const std::invalid_argument& exception) {
+            EXPECT_STREQ("Only 1-channel image can be used there;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
+
+TEST(exception, even_kernel_size) {
+    cv::Mat image = cv::Mat::zeros(10, 10, CV_8U);
+    EXPECT_THROW({
+        try {
+            maxNeighbourFilter(image, 2);
+        }
+        catch(const std::invalid_argument& exception) {
+            EXPECT_STREQ("Kernel size must be an odd number;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
+
+TEST(exception, negative_kernel_size) {
+    cv::Mat image = cv::Mat::zeros(10, 10, CV_8U);
+    EXPECT_THROW({
+        try {
+            maxNeighbourFilter(image, -3);
+        }
+        catch(const std::invalid_argument& exception) {
+            EXPECT_STREQ("Kernel size must be a positive number;", exception.what());
+            throw;
+        }
+    }, std::invalid_argument);
+}
 
 TEST(white_image, square) {
     cv::Mat image = cv::imread("../tests/data/input/white_square.png", cv::IMREAD_GRAYSCALE);

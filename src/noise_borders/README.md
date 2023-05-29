@@ -1,0 +1,5 @@
+#### [EN] Module description
+This module provides you a functional for the noise estimation. Its core funtion, getGlobalUpperAndLowerBorder, allows you to get an estimate for noise, due to which the initial image differs from all other images that do not contain foreign objects in the elevator cabine. All necessary preprocessing occurs inside this function, so you can use it out of box.
+
+#### [RU] Описание модуля
+Этот модуль содержит весь функционал, необходимый для получения оценок на шум. Его главная функция, getGlobalUpperAndLowerBorder, позволяет пользователю найти оценки на шум, из-за которого стартовое изображения отличается от все последующих снимков, не содержащих инородных предметов в кабине лифта. Необходимая подготовка изображения происходит внутри этой функции, поэтому, использовать функционал этого модуля можно, прктически, из коробки.

@@ -1,7 +1,19 @@
-#include "../../include/filters/filters.h"
+#include <opencv2/opencv.hpp>
+
+#include "filters.hpp"
 
 
 cv::Mat maxNeighbourFilter(cv::Mat image, int kernelSize) {
+    if ((image.channels() != 1) || (image.type() != CV_8U)) {
+        throw std::invalid_argument("Only 1-channel image can be used there;");
+    }
+    if (kernelSize % 2 == 0) {
+        throw std::invalid_argument("Kernel size must be an odd number;");
+    }
+    if (kernelSize < 0) {
+        throw std::invalid_argument("Kernel size must be a positive number;");
+    }
+
     int radius = kernelSize/2;
     cv::Mat filteredImage(image.size(), CV_8UC1);
 
