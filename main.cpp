@@ -13,12 +13,12 @@
 
 
 int main(int argc, char* argv[]) {
-    
+
     if (argc < 2) {
-        std::cerr << "Please, specify a path to the image you want to check;" << std::endl;
+        std::cerr << "Please, specify the path to the image you want to check;" << std::endl;
         return 1;
     }
-    cv::Mat mask = cv::imread("../mask/mask_computed.jpg", cv::IMREAD_GRAYSCALE); 
+    cv::Mat mask = cv::imread("../mask/mask_computed.jpg", cv::IMREAD_GRAYSCALE);
 
     cv::Mat startImage = cv::imread("../data/background/empty/image_07.jpg", cv::IMREAD_COLOR);
     cv::Mat startImagePrepared = prepareImage(startImage, mask, false, startImage.size());
@@ -35,41 +35,41 @@ int main(int argc, char* argv[]) {
     cv::Mat imagePrepared = prepareImage(image, mask, false, startImage.size());
 
     cv::Mat difference = getDifference(startImagePrepared, imagePrepared);
-    cv::Mat thresholded = thresholdImage(difference, -390.875, 308.125);
+    cv::Mat ImageThresholded = thresholdImage(difference, -390.875, 308.125);
 
-    thresholded = maxNeighbourFilter(thresholded, 3);
-    thresholded = maxNeighbourFilter(thresholded, 3);
-    thresholded = maxNeighbourFilter(thresholded, 3);
-    thresholded = maxNeighbourFilter(thresholded, 3);
+    for (int indexI = 0; indexI < 4; ++indexI) {
+        ImageThresholded = maxNeighbourFilter(ImageThresholded, 3);
+    }
 
-    cv::dilate(thresholded, thresholded, getStructuringElement(cv::MORPH_RECT, cv::Size(7, 7)));
-    cv::dilate(thresholded, thresholded, getStructuringElement(cv::MORPH_RECT, cv::Size(7, 7)));
-    cv::dilate(thresholded, thresholded, getStructuringElement(cv::MORPH_RECT, cv::Size(7, 7)));
+    for (int indexI = 0; indexI < 4; ++indexI) {
+        cv::dilate(ImageThresholded, ImageThresholded, getStructuringElement(cv::MORPH_RECT, cv::Size(7, 7)));
+    }
 
-    std::vector<std::vector<int>> objects = detectObjects(thresholded);
+    std::vector<std::vector<int>> objects = detectObjects(ImageThresholded);
 
-    cv::Mat rectangles = makeRectangles(imageToDraw, objects);
+    cv::Mat ObjectsDetected = makeRectangles(imageToDraw, objects);
 
-    cv::resize(rectangles, rectangles, cv::Size(), 0.7, 0.7);
+    cv::Mat ObjectsDetectedResized;
+    cv::resize(ObjectsDetected, ObjectsDetectedResized, cv::Size(), 0.7, 0.7);
 
-    cv::imshow("rectangles", rectangles);
+    cv::imshow("Detected objects", ObjectsDetectedResized);
     cv::waitKey(0);
         
     if (argc >= 3) {
         std::string saveFlag = argv[2];
         if (saveFlag == "-s") {
             if (argc < 4) {
-                std::cerr << "Please, specify the path where ypu want to save the result;" << std::endl;
+                std::cerr << "Please, specify the path to directory where you want to save the result;" << std::endl;
                 return 3;
             }
             std::string pathToSave = argv[3];
             int length = pathToSave.size();
             if (pathToSave[length - 1] == '/') {
-                cv::imwrite(pathToSave + "result.jpg", rectangles);
+                cv::imwrite(pathToSave + "result.jpg", ObjectsDetected);
 
                 return 0;
             }
-            cv::imwrite(pathToSave + "/result.jpg", rectangles);
+            cv::imwrite(pathToSave + "/result.jpg", ObjectsDetected);
 
             return 0;
         }
