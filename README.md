@@ -285,7 +285,7 @@ I use the MIT License here, so feel free to copy and modify this code.
 4. Проект собран, теперь можно использовать cli:
    (You are still in the ./build directory)
     ```bash
-    ./antiterror_security --here will be a cli interface--
+    ./antiterror_security path_to_your_image -s path_to_dir
     ```
     Заметьте, что моё решение хорошо работает с моими данными, в вашем случае может понадобится пересчитать оценки на шум и заново найти маску для веделения рабочей зоны.
 
