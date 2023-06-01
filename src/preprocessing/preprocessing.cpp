@@ -1,8 +1,8 @@
+#include <stdexcept>
+
 #include <opencv2/opencv.hpp>
 
 #include "preprocessing.hpp"
-
-#include <stdexcept>
 
 
 cv::Mat prepareImage(cv::Mat image, cv::Mat mask, bool useHistogramEqualization, cv::Size newSize) {

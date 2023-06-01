@@ -1,15 +1,13 @@
 #include <iostream>
 
-#include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 
-#include <utils/utils.hpp>
-#include <utils/utils.hpp>
-#include <noise_borders/noise_borders.hpp>
 #include <detection/detection.hpp>
 #include <filters/filters.hpp>
-#include <working_surface/working_surface.hpp>
+#include <noise_borders/noise_borders.hpp>
 #include <preprocessing/preprocessing.hpp>
+#include <utils/utils.hpp>
 
 
 int main(int argc, char* argv[]) {
