@@ -1,10 +1,10 @@
-#include <utility>
-#include <string>
-#include <stdexcept>
-#include <numeric>
 #include <algorithm>
+#include <numeric>
+#include <stdexcept>
 #include <stdlib.h>
+#include <string>
 #include <vector>
+#include <utility>
 
 #include <opencv2/opencv.hpp>
 
