@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     }
     cv::Mat mask = cv::imread("../mask/mask_computed.jpg", cv::IMREAD_GRAYSCALE);
 
-    cv::Mat startImage = cv::imread("../data/background/empty/image_07.jpg", cv::IMREAD_COLOR);
+    cv::Mat startImage = cv::imread("../data/train/image_07.jpg", cv::IMREAD_COLOR);
     cv::Mat startImagePrepared = prepareImage(startImage, mask, false, startImage.size());
 
     std::string pathToImage = argv[1];
