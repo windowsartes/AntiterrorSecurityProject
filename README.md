@@ -35,23 +35,25 @@ The goal was to create and realize a method to detect adandoned items in the ele
 
 Let's take a look at the images. We start with an image of an empty elevator car.
 
-<img src="./data/background/empty/image_07.jpg" alt="drawing" width="400"/>
+<img src="./readme_images/start_image.jpg" alt="drawing" width="400"/>
 
 The light from the light bulb is actually non-permanent, so the illumination can change.
 
-<img src="./data/background/empty/image_10.jpg" alt="drawing" width="400"/>
+<img src="./readme_images/empty_image.jpg" alt="drawing" width="400"/>
 
-Also the cabin moves, then the camera, so the image can be shifted from its original position. And this makes the task harder.
+Also the cabin moves, then the camera, so the image can be shifted from its original position. And it makes the task harder.
 
---here will be an image with optical flow--
+You still can't see it here, but these lines, they actually have different lenght and even orientation.
+
+<img src="./readme_images/optical_flow.png" alt="drawing" width="800"/>
 
 Sometimes there are lost items it the elevator cab, we need to detect them.
 
-<img src="./data/objects/3_objects/image_04.jpg" alt="drawing" width="400"/>
+<img src="./readme_images/objects.jpg" alt="drawing" width="400"/>
 
 Often people put ads on the walls of the elevator. Such things hardly pose a real threat, so we want to ignore their appearnce.
 
-<img src="./data/walls/objects/image_15.jpg" alt="drawing" width="400"/>
+<img src="./readme_images/sticker_on_the_mirror.jpg" alt="drawing" width="400"/>
 
 So what solution have I proposed? 
 
@@ -61,11 +63,11 @@ So what solution have I proposed?
 #### Floor detecion
 Firstly, we need to find a working surface - the cabin's floor. To solve this problem, I've used a Canny edge detector with little post-processing. Below you can see the  resulted mask. 
 
-<img src="./mask/mask_computed.jpg" alt="drawing" width="400"/>
+<img src="./readme_images/mask_computed.jpg" alt="drawing" width="400"/>
 
 It's definitely not ideal, but it's good enough. Later I want to improve this result, may be another edge detector will show better performance.
 
-You can find the entire source code for solving this problem in the "working_surface" module.
+You can find the entire source code for solving this problem in the **working_surface** module.
 
 <!-- omit from toc -->
 #### Search for forgotten items
@@ -73,17 +75,55 @@ You can find the entire source code for solving this problem in the "working_sur
 Optical flow can't help as to determine the cabin's shift, so
 I've formulated the following hypothesis: **the cabin is stable, but every time we make a shot, random noise appearce so the pixels are corrupted now**. 
 
---here can be a hystogram with the noise value--
+<img src="./readme_images/histogram.png" alt="drawing" width="400"/>
+
+Noise between two empty images which we saw above, when they are in grayscale format. As you can see, it's definitely not normal, it's more like Beta distribution with both $\alpha$ and $\beta$ = 0.5
 
 If there is a noise, so we can try to get it from the corrupted images, estimate it then try to remove. 
 In my hypotesis, using noise estimation and may be a post-processing, we can detect real forgotten items.
 
---As fast as I write a formal work report, the will be a table with result and the explanation--
+Here you can see the table with lower and upper border we have computed according to different parameters of the algorithm. These borders we can you to threshold image, for example, using **thresholdImage** from **noise_borders** module.
+
+<table>
+   <tr>
+      <td>    </td>
+      <td colspan="2">Color images</td>
+      <td colspan="2">Gray images</td>
+   </tr>
+   <tr>
+      <td> Strategy </td>
+      <td> With histogram equalization </td>
+      <td> Without histogram equalization </td>
+      <td> With histogram equalization </td>
+      <td> Without histogram equalization </td>
+   </tr>
+   <tr>
+      <td> Max </td>
+      <td> -701, 650 </td>
+      <td> -533, 515 </td>
+      <td> -235, 225 </td>
+      <td> -175, 179 </td>
+   </tr>
+   <tr>
+      <td> Mean </td>
+      <td> -523.875, 425.5 </td>
+      <td> -390.875, 308.125 </td>
+      <td> -174.5, 147.5 </td>
+      <td> -127.875, 106.375 </td>
+   </tr>
+   <tr>
+      <td> Median </td>
+      <td> -491.5, 329 </td>
+      <td> -381.5, 212 </td>
+      <td> -162.5, 112 </td>
+      <td> -126, 73 </td>
+  </tr>
+</table>
 
 On this stage, we have a denoised and thresholded image, then we need to finally detect the lost objects.
 
 
-You can find the entire source code for solving this problem in the "noise_borders" module.
+You can find the entire source code for solving this problem in the **noise_borders** module.
 
 <!-- omit from toc -->
 #### Object detection
@@ -91,19 +131,68 @@ You can find the entire source code for solving this problem in the "noise_borde
 We want to find the left objects, that is, circle them in a frame, so the guard can pat attention to them.
 Pixels, which locates next to each other, are the pixels of the same object, so we can recursively find this object's borders and circle it.
 
---Here will be an image with detected objects--
+As a result, we get something like this:
 
-You can find the entire source code for solving this problem in the "detection" module.
+<img src="./readme_images/result.jpg" alt="drawing" width="400"/>
+
+You can find the entire source code for solving this problem in the **detection** module.
 
 ### Results
 
 Using this pipeline with different parameters, like, use histogram equalization or not, use grayscale or BGR format and etc, you cant achieve the following result: 
 
---Here will be the table with metrics and metrics explanation--
+
+<table>
+   <tr>
+      <td>  </td>
+      <td colspan="3"> Validation </td>
+      <td colspan="2"> Test </td>
+   </tr>
+   <tr>
+      <td> Straregy, parameters and postprocessing </td>
+      <td> Precision </td>
+      <td> Recall </td>
+      <td> F<sub>2</sub></td>
+      <td> Precision </td>
+      <td> Recall </td>
+   </tr>
+   <tr>
+      <td> Mean, Color, without eq.; M<sub>3</sub>x4, D<sub>7</sub>x3</td>
+      <td> 0.741 </td>
+      <td> 0.855 </td>
+      <td> <b>0.830</b> </td>
+      <td> <b>1.000</b> </td>
+      <td> <b>1.000</b> </td>
+   </tr>
+   <tr>
+      <td> Mean, Color, with eq.; M<sub>3</sub>x5, D<sub>7</sub>x3</td>
+      <td> <b>0.856</b> </td>
+      <td> 0.710 </td>
+      <td> 0.735 </td>
+      <td> <b>1.000</b> </td>
+      <td> 0.727 </td>
+   </tr>
+   <tr>
+      <td> Median, Color, without eq.; M<sub>3</sub>x4, D<sub>7</sub>x3</td>
+      <td> 0.369 </td>
+      <td> <b>0.949</b> </td>
+      <td> 0.722 </td>
+      <td> <b>1.000</b> </td>
+      <td> <b>1.000</b> </td>
+   </tr>
+</table>
+
+As you can see, we've achieved the following results:
+second algo can detect around 70% of all lost items, but it'll generate on 1 extra frame for every 6 correct ones.
+Third variant will detect around 95% of all lost items, which is very good, but it'll also generate 2 extra frames for every one correct. 
+First implementation just have the best ratio between precision and recall.
+
+(Here M<sub>x</sub> is a shortcut for MaxNeighbour filter,
+D<sub>x</sub> is a shortcut for Dilate filter)
 
 ### Details
 
-In the case you want to know more about the details or you want to read about this problem in more scientific way, you can read my paper. --Here will be a hyperlink, when the report will be done-- 
+In the case you want to know more about the details or you want to read about this problem in more scientific way, you can read my [report](./report.pdf) in Russian. 
 
 ## Install and Run
 
@@ -113,7 +202,7 @@ To run install and run this peoject, you can follow these steps:
 2. Clone this project using the following command:
    ```bash
     git clone git@github.com:windowsartes/AntiterrorSecurityProject.git
-    cd antiterror_security_project/
+    cd AntiterrorSecurityProject/
    ```
    So you are in the project root directory now.
 3. To build the project, there are 2 options:
@@ -172,7 +261,8 @@ Thanks to my academic advisor, Andrei V. Shipatov, for the opportunity to try my
 
 ## License
 
-I use the MIT License here, so feel free to copy and modify this code.
+I use the MIT [License](./LICENSE.md)
+ here, so feel free to copy and modify this code.
 
 # [RU] Система антитеррористической безопасности
 
@@ -214,7 +304,7 @@ I use the MIT License here, so feel free to copy and modify this code.
 
 В первую очередь необходимо найти рабочую поверхность кабины - ей пол. Для решения этой задачи я использовал детектор границ Кэнни и лёгкую постобработку. Ниже вы можете наблюдать результат работы этого алгоритма:
 
-<img src="./mask/mask_computed.jpg" alt="drawing" width="400"/>
+<img src="./readme_images/mask_computed.jpg" alt="drawing" width="400"/>
 
 Да, маска получилась далеко не идеальной. В дальнейшем я хотел бы улучшить её, возможно, другой алгоритм обнаружения границ справится с этой задачей получше.
 
@@ -264,7 +354,7 @@ I use the MIT License here, so feel free to copy and modify this code.
 2. Склонируйте этот репозиторий с помощью следующей команды:
    ```bash
     git clone git@github.com:windowsartes/AntiterrorSecurityProject.git
-    cd antiterror_security_project/
+    cd AntiterrorSecurityProject/
    ```
    Теперь вы находитесь в корневой директории проекта.
 3. Есть 2 варианта, чтобы собрать этот проект:
