@@ -4,7 +4,7 @@
 #include <utils/utils.cpp>
 
 
-TEST(get_difference, exception_equal_numner_of_channels) {
+TEST(getDifference, exceptionEqualNumnerOfChannelsCase) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC1, cv::Scalar::all(0));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC3, cv::Scalar::all(5));
 
@@ -19,7 +19,7 @@ TEST(get_difference, exception_equal_numner_of_channels) {
     }, std::invalid_argument);
 }
 
-TEST(get_difference, exception_1_or_3_channels) {
+TEST(getDifference, exception1Or3ChannelsCase) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC2, cv::Scalar::all(0));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC2, cv::Scalar::all(5));
 
@@ -34,7 +34,7 @@ TEST(get_difference, exception_1_or_3_channels) {
     }, std::invalid_argument);
 }
 
-TEST(get_difference, 3_channels_first_zeros) {
+TEST(getDifference, 3ChannelsWithFirstImageAllZeros) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC3, cv::Scalar::all(0));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC3, cv::Scalar::all(5));
 
@@ -48,7 +48,7 @@ TEST(get_difference, 3_channels_first_zeros) {
     }
 }
 
-TEST(get_difference, 3_channels_second_zeros) {
+TEST(getDifference, 3ChannelsWithSecondImageAllZeros) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC3, cv::Scalar::all(5));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC3, cv::Scalar::all(0));
 
@@ -62,7 +62,7 @@ TEST(get_difference, 3_channels_second_zeros) {
     }
 }
 
-TEST(get_difference, 3_channels_max_value) {
+TEST(getDifference, 3ChannelsWithFirstImageAllMaxValues) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC3, cv::Scalar::all(255));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC3, cv::Scalar::all(0));
 
@@ -76,7 +76,7 @@ TEST(get_difference, 3_channels_max_value) {
     }
 }
 
-TEST(get_difference, 3_channels_min_value) {
+TEST(getDifference, 3ChannelsWithSecondImageAllMaxValues) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC3, cv::Scalar::all(0));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC3, cv::Scalar::all(255));
 
@@ -90,7 +90,7 @@ TEST(get_difference, 3_channels_min_value) {
     }
 }
 
-TEST(get_difference, 1_channel_first_zeros) {
+TEST(getDifference, 1ChannelWithFirstImageAllZeros) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC1, cv::Scalar::all(0));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC1, cv::Scalar::all(15));
 
@@ -104,7 +104,7 @@ TEST(get_difference, 1_channel_first_zeros) {
     }
 }
 
-TEST(get_difference, 1_channel_second_zeros) {
+TEST(getDifference, 1ChannelWithSecondImageAllZeros) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC1, cv::Scalar::all(15));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC1, cv::Scalar::all(0));
 
@@ -118,7 +118,7 @@ TEST(get_difference, 1_channel_second_zeros) {
     }
 }
 
-TEST(get_difference, 1_channel_max_value) {
+TEST(getDifference, 1ChannelWithFirstImageAllMaxValues) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC1, cv::Scalar(255));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC1, cv::Scalar(0));
 
@@ -133,7 +133,7 @@ TEST(get_difference, 1_channel_max_value) {
     }
 }
 
-TEST(get_difference, 1_channel_min_value) {
+TEST(getDifference, 1ChannelWithSecondImageAllMaxValues) {
     cv::Mat image1 = cv::Mat(10, 10, CV_8UC1, cv::Scalar(0));
     cv::Mat image2 = cv::Mat(10, 10, CV_8UC1, cv::Scalar(255));
 

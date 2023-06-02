@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 
-TEST(findSurface, exception_1_or_3_channels) {
+TEST(findSurface, exception1Or3ChannelsCase) {
     cv::Mat image = cv::Mat::zeros(10, 10, CV_8UC2);
     EXPECT_THROW({
         try {
@@ -25,7 +25,7 @@ TEST(findSurface, exception_1_or_3_channels) {
 *####*
 *####*
 */
-TEST(removeHoles, corner_case) {
+TEST(removeHoles, cornerCase) {
     cv::Mat result = cv::Mat::zeros(6, 6, CV_8U);
     for (int indexJ = 1; indexJ <= 4; ++indexJ) {
         result.at<uchar>(1, indexJ) = 255;
@@ -61,7 +61,7 @@ TEST(removeHoles, corner_case) {
 *####*
 *####*
 */
-TEST(removeHoles, corner_case_without_holes) {
+TEST(removeHoles, cornerWithoutHolesCase) {
     cv::Mat result = cv::Mat::zeros(6, 6, CV_8U);
     for (int indexI = 1; indexI <= 4; ++indexI) {
         for (int indexJ = 1; indexJ <= 4; ++indexJ) {
@@ -93,7 +93,7 @@ TEST(removeHoles, corner_case_without_holes) {
 *####*
 ******
 */
-TEST(removeHoles, inner_case) {
+TEST(removeHoles, innerCase) {
     cv::Mat result = cv::Mat::zeros(6, 6, CV_8U);
     for (int indexJ = 1; indexJ <= 4; ++indexJ) {
         result.at<uchar>(1, indexJ) = 255;
@@ -129,7 +129,7 @@ TEST(removeHoles, inner_case) {
 *####*
 ******
 */
-TEST(removeHoles, inner_case_without_holes) {
+TEST(removeHoles, innerWithoutHolesCase) {
     cv::Mat result = cv::Mat::zeros(6, 6, CV_8U);
     for (int indexI = 1; indexI <= 4; ++indexI) {
         for (int indexJ = 1; indexJ <= 4; ++indexJ) {
