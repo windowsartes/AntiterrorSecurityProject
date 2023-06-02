@@ -4,7 +4,7 @@
 
 #include <filters/filters.hpp>
 
-TEST(exception, wrong_number_of_channels) {
+TEST(maxNeighbourFilter, exceptionWrongNumberOfChannelsCase) {
     cv::Mat image = cv::Mat::zeros(10, 10, CV_8UC3);
     EXPECT_THROW({
         try {
@@ -17,7 +17,7 @@ TEST(exception, wrong_number_of_channels) {
     }, std::invalid_argument);
 }
 
-TEST(exception, wrong_input_type) {
+TEST(maxNeighbourFilter, exceptionWrongInputTypeCase) {
     cv::Mat image = cv::Mat::zeros(10, 10, CV_16SC1);
     EXPECT_THROW({
         try {
@@ -30,7 +30,7 @@ TEST(exception, wrong_input_type) {
     }, std::invalid_argument);
 }
 
-TEST(exception, even_kernel_size) {
+TEST(maxNeighbourFilter, exceptionEvenKernelSizeCase) {
     cv::Mat image = cv::Mat::zeros(10, 10, CV_8U);
     EXPECT_THROW({
         try {
@@ -43,7 +43,7 @@ TEST(exception, even_kernel_size) {
     }, std::invalid_argument);
 }
 
-TEST(exception, negative_kernel_size) {
+TEST(maxNeighbourFilter, exceptionNegativeKernelSizeCase) {
     cv::Mat image = cv::Mat::zeros(10, 10, CV_8U);
     EXPECT_THROW({
         try {
@@ -56,7 +56,7 @@ TEST(exception, negative_kernel_size) {
     }, std::invalid_argument);
 }
 
-TEST(white_image, square) {
+TEST(maxNeighbourFilter, whiteSquareCase) {
     cv::Mat image = cv::imread("../tests/data/input/white_square.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/input/white_square.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 3);
@@ -65,7 +65,7 @@ TEST(white_image, square) {
     ASSERT_TRUE(countNonZero(cv::Mat(result - answer)) == 0);
 }
 
-TEST(white_image, rectangular_long) {
+TEST(maxNeighbourFilter, whiteLongRectangleCase) {
     cv::Mat image = cv::imread("../tests/data/input/white_rectangular_long.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/input/white_rectangular_long.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 3);
@@ -74,7 +74,7 @@ TEST(white_image, rectangular_long) {
     ASSERT_TRUE(countNonZero(cv::Mat(result - answer)) == 0);
 }
 
-TEST(white_image, rectangular_wide) {
+TEST(maxNeighbourFilter, whiteWideRectangleCase) {
     cv::Mat image = cv::imread("../tests/data/input/white_rectangular_wide.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/input/white_rectangular_wide.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 3);
@@ -83,7 +83,7 @@ TEST(white_image, rectangular_wide) {
     ASSERT_TRUE(countNonZero(cv::Mat(result - answer)) == 0);
 }
 
-TEST(black_image, square) {
+TEST(maxNeighbourFilter, blackSquareCase) {
     cv::Mat image = cv::imread("../tests/data/input/black_square.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/input/black_square.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 3);
@@ -92,7 +92,7 @@ TEST(black_image, square) {
     ASSERT_TRUE(countNonZero(cv::Mat(result - answer)) == 0);
 }
 
-TEST(black_image, rectangular_long) {
+TEST(maxNeighbourFilter, blackLongRectangleCase) {
     cv::Mat image = cv::imread("../tests/data/input/black_rectangular_long.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/input/black_rectangular_long.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 3);
@@ -101,7 +101,7 @@ TEST(black_image, rectangular_long) {
     ASSERT_TRUE(countNonZero(cv::Mat(result - answer)) == 0);
 }
 
-TEST(black_image, rectangular_wide) {
+TEST(maxNeighbourFilter, blackWideRectangleCase) {
     cv::Mat image = cv::imread("../tests/data/input/black_rectangular_wide.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/input/black_rectangular_wide.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 3);
@@ -110,7 +110,7 @@ TEST(black_image, rectangular_wide) {
     ASSERT_TRUE(countNonZero(cv::Mat(result - answer)) == 0);
 }
 
-TEST(random_image, square_1) {
+TEST(maxNeighbourFilter, storedRandomSquareFirstCase) {
     cv::Mat image = cv::imread("../tests/data/input/random_square_1.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/answer/answer_random_square_1.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 3);
@@ -119,7 +119,7 @@ TEST(random_image, square_1) {
     ASSERT_TRUE(countNonZero(cv::Mat(result - answer)) == 0);
 }
 
-TEST(random_image, square_2) {
+TEST(maxNeighbourFilter, storedRandomSquareSecondCase) {
     cv::Mat image = cv::imread("../tests/data/input/random_square_2.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/answer/answer_random_square_2.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 3);
@@ -128,7 +128,7 @@ TEST(random_image, square_2) {
     ASSERT_TRUE(countNonZero(cv::Mat(result - answer)) == 0);
 }
 
-TEST(random_image, square_3_kernel_size_3) {
+TEST(maxNeighbourFilter, storedRandomSquareThirdCase) {
     cv::Mat image = cv::imread("../tests/data/input/random_square_3.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/answer/answer_random_square_3_size_3.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 3);
@@ -137,7 +137,7 @@ TEST(random_image, square_3_kernel_size_3) {
     ASSERT_TRUE(countNonZero(cv::Mat(result - answer)) == 0);
 }
 
-TEST(random_image, square_3_kernel_size_5) {
+TEST(maxNeighbourFilter, storedRandomSquareThirdCase2) {
     cv::Mat image = cv::imread("../tests/data/input/random_square_3.png", cv::IMREAD_GRAYSCALE);
     cv::Mat answer = cv::imread("../tests/data/answer/answer_random_square_3_size_5.png", cv::IMREAD_GRAYSCALE);
     cv::Mat result = maxNeighbourFilter(image, 5);

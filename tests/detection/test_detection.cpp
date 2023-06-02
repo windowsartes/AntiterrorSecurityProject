@@ -3,7 +3,7 @@
 #include <detection/detection.cpp>
 
 
-TEST(find_object, square_1) {
+TEST(findObject, squareCase) {
 cv::Mat image = cv::Mat::zeros(200, 200, CV_8U);
 
     std::vector<std::vector<bool>> visited(image.rows, std::vector<bool>(image.cols, false));
@@ -21,7 +21,7 @@ cv::Mat image = cv::Mat::zeros(200, 200, CV_8U);
     ASSERT_TRUE((l == 50) && (r == 149) && (t == 50) && (b == 149));
 }
 
-TEST(find_object, rectangle_1) {
+TEST(findObject, rectangleCase) {
     cv::Mat image = cv::Mat::zeros(200, 200, CV_8U);
     std::vector<std::vector<bool>> visited(image.rows, std::vector<bool>(image.cols, false));
 
@@ -38,7 +38,7 @@ TEST(find_object, rectangle_1) {
     ASSERT_TRUE((l == 20) && (r == 29) && (t == 50) && (b == 149));
 }
 
-TEST(find_object, corner_case_square) {
+TEST(findObject, cornerSquareCase) {
     cv::Mat image = cv::Mat::ones(200, 200, CV_8U);
     std::vector<std::vector<bool>> visited(image.rows, std::vector<bool>(image.cols, false));
 
@@ -49,7 +49,7 @@ TEST(find_object, corner_case_square) {
     ASSERT_TRUE((l == 0) && (r == image.cols - 1) && (t == 0) && (b == image.rows - 1));
 }
 
-TEST(find_object, corner_case_wide_rectangle) {
+TEST(findObject, cornerWideRectangleCase) {
     cv::Mat image = cv::Mat::ones(100, 200, CV_8U);
     std::vector<std::vector<bool>> visited(image.rows, std::vector<bool>(image.cols, false));
 
@@ -60,7 +60,7 @@ TEST(find_object, corner_case_wide_rectangle) {
     ASSERT_TRUE((l == 0) && (r == image.cols - 1) && (t == 0) && (b == image.rows - 1));
 }
 
-TEST(find_object, corner_case_long_rectangle) {
+TEST(findObject, cornerLongRectangleCase) {
     cv::Mat image = cv::Mat::ones(200, 100, CV_8U);
     std::vector<std::vector<bool>> visited(image.rows, std::vector<bool>(image.cols, false));
 
@@ -71,7 +71,7 @@ TEST(find_object, corner_case_long_rectangle) {
     ASSERT_TRUE((l == 0) && (r == image.cols - 1) && (t == 0) && (b == image.rows - 1));
 }
 
-TEST(detect_objects, catch_exception_8UC3) {
+TEST(detectObjects, exception3ChannelsCase) {
     cv::Mat image = cv::Mat(10, 10, CV_8UC3, cv::Scalar(0));
     EXPECT_THROW({
         try {
@@ -84,7 +84,7 @@ TEST(detect_objects, catch_exception_8UC3) {
     }, std::invalid_argument);
 }
 
-TEST(detect_objects, catch_exception_16SC1) {
+TEST(detectObjects, exceptionNot8UCase) {
     cv::Mat image = cv::Mat(10, 10, CV_16SC1, cv::Scalar(0));
     EXPECT_THROW({
         try {
@@ -97,7 +97,7 @@ TEST(detect_objects, catch_exception_16SC1) {
     }, std::invalid_argument);
 }
 
-TEST(detect_objects, empty_image) {
+TEST(detectObjects, emptyImageCase) {
     cv::Mat image = cv::Mat::zeros(200, 200, CV_8U);
 
     std::vector<std::vector<int>> objects = detectObjects(image);
@@ -105,7 +105,7 @@ TEST(detect_objects, empty_image) {
     ASSERT_TRUE(objects.size() == 0);
 }
 
-TEST(detect_objects, 1_square) {
+TEST(detectObjects, oneSquareCase) {
     cv::Mat image = cv::Mat::zeros(200, 200, CV_8U);
 
     for (int i = 20; i < 100; ++i) {
@@ -123,7 +123,7 @@ TEST(detect_objects, 1_square) {
     ASSERT_TRUE((object1[0] == 20) && (object1[1] == 99) && (object1[2] == 20) && (object1[3] == 99));
 }
 
-TEST(detect_objects, 2_squares) {
+TEST(detectObjects, twoSquaresCase) {
     cv::Mat image = cv::Mat::zeros(200, 200, CV_8U);
 
     for (int i = 20; i < 100; ++i) {
@@ -148,7 +148,7 @@ TEST(detect_objects, 2_squares) {
     ASSERT_TRUE((object2[0] == 120) && (object2[1] == 159) && (object2[2] == 120) && (object2[3] == 159));
 }
 
-TEST(detect_objects, 2_squares_minimum_distance_shared_rows) {
+TEST(detectObjects, twoSquaresWithMinimumDistanceSharedRowsCase) {
     cv::Mat image = cv::Mat::zeros(200, 200, CV_8U);
 
     for (int i = 20; i < 100; ++i) {
@@ -173,7 +173,7 @@ TEST(detect_objects, 2_squares_minimum_distance_shared_rows) {
     ASSERT_TRUE((object2[0] == 101) && (object2[1] == 159) && (object2[2] == 20) && (object2[3] == 99));
 }
 
-TEST(detect_objects, 2_squares_minimum_distance_shared_cols) {
+TEST(detectObjects, twoSquaresMinimumDistanceSharedColsCase) {
     cv::Mat image = cv::Mat::zeros(200, 200, CV_8U);
 
     for (int i = 20; i < 100; ++i) {
