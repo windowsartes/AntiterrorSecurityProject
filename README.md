@@ -1,7 +1,7 @@
-# [EN] Anti-terror security project
+# [EN] Antiterror security project
 
 
-- [\[EN\] Anti-terror security project](#en-anti-terror-security-project)
+- [\[EN\] Antiterror security project](#en-antiterror-security-project)
   - [Overview](#overview)
     - [Introduction](#introduction)
     - [Proposed solution ](#proposed-solution-)
@@ -223,11 +223,17 @@ To run install and run this peoject, you can follow these steps:
        cmkae --build .
        ```
 4. The project have built so you can use the cli now:
+5. 
    (You are still in the ./build directory)
+
     ```bash
-    ./antiterror_security --here will be a cli interface--
+    ./antiterror_security <path_to_your_image> [-s] [path_to_dir]
     ```
-    Note that it works fine for my dataset, in your case may be you will be needed to compute a new bounds for noise using "noise_dorders" module and new mask for working surface with "working_surface" module
+
+   Be sure to pass as the first argument the path to the file (absolute or relative to the ./build directory) where you want to find leftover items.
+   The result can be saved in a directory of your choice, to do this, pass the "-s" flag as the second argument, followed by the path to this directory.
+
+   Note that it works fine for my dataset, in your case may be you will be needed to compute a new bounds for noise using "noise_dorders" module and new mask for working surface with "working_surface" module
 
 ## How to Use the Project
 
@@ -479,11 +485,15 @@ D<sub>x</sub> - сокращение для фильтра Dilate)
        cmkae --build .
        ```
 4. Проект собран, теперь можно использовать cli:
+   
    (Вы всё ещё в директории ./build)
     ```bash
-    ./antiterror_security path_to_your_image -s path_to_dir
+    ./antiterror_security <path_to_your_image> [-s] [path_to_dir]
     ```
-    Заметьте, что моё решение хорошо работает с моими данными, в вашем случае может понадобиться пересчитать оценки на шум и заново найти маску для веделения рабочей зоны.
+   Обязательно нужно первым аргументом передать путь до файла (абсолютный или записаный относительно директории ./build), на котором вы хотите найти оставленные предметы.
+   Результат можно сохранить в вами выбранной директории, для этого передайте флаг "-s" вторым аргументом и за ним путь до этой директории.
+
+   Заметьте, что моё решение хорошо работает с моими данными, в вашем случае может понадобиться пересчитать оценки на шум и заново найти маску для веделения рабочей зоны.
 
 ## Как использовать этот проект
 
